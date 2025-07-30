@@ -1,0 +1,24 @@
+---
+
+import DefaultLayout from "@layouts/DefaultLayout.astro"
+import { useTranslations } from "@i18n/utils";
+
+
+export async function getStaticPaths() {
+  return ['it', 'en'].map((lang) => {
+    return {
+      params: { locale: lang }
+    };
+  });
+}
+
+const t = useTranslations(Astro.currentLocale);
+
+
+
+---
+
+<DefaultLayout>
+  <h1>{ t('ambients.galleryTitle') }</h1>
+</DefaultLayout>
+
