@@ -1,8 +1,8 @@
 ---
+import { paths } from "@stores/i18n-params";
+import { getSeoData, seoData } from "@stores/seo";
 
-import DefaultLayout from "@layouts/DefaultLayout.astro"
-import { useTranslations } from "@i18n/utils";
-
+import Home from "@components/pages/Home.astro";
 
 export async function getStaticPaths() {
   return ['it', 'en'].map((lang) => {
@@ -12,13 +12,28 @@ export async function getStaticPaths() {
   });
 }
 
-const t = useTranslations(Astro.currentLocale);
+const slugs : any = {};
+['it', 'en'].map(
+  (t) => (slugs[t] = { index: "/" })
+);
 
+paths.set(slugs);
 
+seoData.set({
+  ...getSeoData(null),
+  languageAlternates: [
+    ...['it', 'en'].map(lang => ({
+      href: `/${lang}`,
+      hrefLang: lang,
+    })),
+    {
+      href: `https://www.website.it/it`,
+      hrefLang: 'x-default',
+    }
+  ]
+});
 
 ---
 
-<DefaultLayout>
-  <h1>{ t('ambients.galleryTitle') }</h1>
-</DefaultLayout>
 
+<Home />

@@ -1,10 +1,23 @@
 ---
+// Style
 import '@styles/global.css'
+
+// Utils
+import { SEO } from "astro-seo";
+import { seoData, type seoDataValue } from "@stores/seo";
+
+// Components
+import LangSwitcher from '@components/LangSwitcher/LangSwitcher.astro';
+
+const pageSeo: any | seoDataValue = seoData.get();
+
+
 ---
 <html lang={Astro.currentLocale} transition:animate="fade">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <SEO {...pageSeo} />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
@@ -12,6 +25,7 @@ import '@styles/global.css'
     <meta name="format-detection" content="telephone=no" />
   </head>
   <body>
+    <LangSwitcher />
     <div id="__page">
       <slot />
     </div>

@@ -1,0 +1,46 @@
+---
+import { languages } from '@i18n/ui'
+import { paths } from '@stores/i18n-params'
+import LangS from './LangS.vue'
+
+const isDynamic = (p) => p.startsWith('[') && p.endsWith(']')
+
+const routePattern = Astro.routePattern
+const routeParams = routePattern.split('/').filter(_ => _).filter(p => !Object.keys(languages).includes(p))
+
+const pathChains = {}
+for (const locale of Object.keys(paths.get())) {
+  pathChains[locale] = []
+}
+
+for (const locale of Object.keys(paths.get())) {
+  for (const param of routeParams) {
+
+    if (param == 'locale') {
+      pathChains[locale] = []
+      continue
+    }
+
+    if (isDynamic(param)) {
+      const _param = param.replace('[', '').replace(']', '')
+      if (!paths.get()[locale]) {
+        continue
+      }
+      if (paths.get()[locale].hasOwnProperty(_param)) {
+        pathChains[locale].push(paths.get()[locale][_param])
+      }
+    } else if (paths.get()[locale]) {
+      pathChains[locale].push(paths.get()[locale][param])
+    }
+  }
+  
+  if (pathChains[locale].length == 0) {
+    pathChains[locale].push('/')
+  }
+}
+
+const availLangs = Object.keys(paths.get())
+
+---
+
+<LangS availLangs={availLangs} currentLocale={Astro.currentLocale} pathChains={pathChains} client:load/>
