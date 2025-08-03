@@ -1,9 +1,15 @@
 ---
-
+import { getLocaleRoute } from "@i18n/utils";
 import DefaultLayout from "@layouts/DefaultLayout.astro";
 
+const { homePageFields } = Astro.props
 ---
 
 <DefaultLayout>
-  <div>AAAA</div>
+  <h1>{ homePageFields.hero.title }</h1>
+  <br>
+
+  <a href={getLocaleRoute(Astro.currentLocale, 'company')}>Company</a>
+
+
 </DefaultLayout>

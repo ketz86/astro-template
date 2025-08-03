@@ -3,29 +3,28 @@ import { paths } from "@stores/i18n-params";
 import { getSeoData, seoData } from "@stores/seo";
 import { getCollection } from "astro:content";
 
-import Home from "@components/pages/Home.astro";
+import Company from "@components/pages/Company.astro";
 
 export async function getStaticPaths() {
 
   const pages = await getCollection('pages')
-  const homepage = pages.find(page => page.data.template.templateName == 'Homepage')
+  const page = pages.find(page => page.data.template.templateName == 'Azienda')
 
-  return ['it', 'en'].map((lang) => {
+  return [{l: 'it', s: 'azienda'}, {l: 'en', s: 'company'}].map((lang) => {
     return {
-      params: { locale: lang },
+      params: { locale: lang.l, company: lang.s },
       props: {
-        page: homepage.data
+        page: page.data
       }
     };
   });
 }
 
 const { page } = Astro.props
-const homePageFields = page.template.homepageFields
 
 const slugs : any = {};
-['it', 'en'].map(
-  (t) => (slugs[t] = { index: "/" })
+[{l: 'it', s: 'azienda'}, {l: 'en', s: 'company'}].map(
+  (t) => (slugs[t.l] = { company: t.s })
 );
 
 paths.set(slugs);
@@ -34,7 +33,7 @@ seoData.set({
   ...getSeoData(null),
   languageAlternates: [
     ...['it', 'en'].map(lang => ({
-      href: `/${lang}`,
+      href: `/${lang}/azienda`,
       hrefLang: lang,
     })),
     {
@@ -46,5 +45,4 @@ seoData.set({
 
 ---
 
-
-<Home {homePageFields} />
+<Company />

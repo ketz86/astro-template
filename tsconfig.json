@@ -6,6 +6,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
+        "@queries/*": ["src/content/queries/*"],
         "@styles/*": ["src/styles/*"],
         "@stores/*": ["src/stores/*"],
         "@layouts/*": ["src/layouts/*"],

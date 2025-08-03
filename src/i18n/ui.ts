@@ -16,5 +16,9 @@ export const routes = {
   homepage: {
     it: "/",
     en: "/"
+  },
+  company: {
+    it: "/azienda",
+    en: "/company"
   }
 };

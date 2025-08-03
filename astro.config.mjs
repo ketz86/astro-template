@@ -31,6 +31,10 @@ export default defineConfig({
       adapter: netlify()
   } : {}),
 
+  experimental: {
+    liveContentCollections: true
+  },
+
   vite: {
     plugins: [tailwindcss()],
     resolve: {

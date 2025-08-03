@@ -1,27 +1,14 @@
 ---
 import { paths } from "@stores/i18n-params";
 import { getSeoData, seoData } from "@stores/seo";
-import { getCollection } from "astro:content";
+import { getLiveCollection } from "astro:content";
 
 import Home from "@components/pages/Home.astro";
 
-export async function getStaticPaths() {
 
-  const pages = await getCollection('pages')
-  const homepage = pages.find(page => page.data.template.templateName == 'Homepage')
-
-  return ['it', 'en'].map((lang) => {
-    return {
-      params: { locale: lang },
-      props: {
-        page: homepage.data
-      }
-    };
-  });
-}
-
-const { page } = Astro.props
-const homePageFields = page.template.homepageFields
+const pages = await getLiveCollection('livePages')
+const homepage = pages.entries.find(page => page.template.templateName == 'Homepage')
+const homePageFields = homepage.template.homepageFields
 
 const slugs : any = {};
 ['it', 'en'].map(
@@ -47,4 +34,4 @@ seoData.set({
 ---
 
 
-<Home {homePageFields} />
+<Home {homePageFields}/>

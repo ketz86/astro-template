@@ -1,6 +1,8 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { ui, defaultLang, routes } from './ui';
 
+const { VITE_TARGET } = import.meta.env
+
 const hasDynamicPath = path => path.split('/').some(el => el.startsWith('['))
 
 export function useTranslations(lang: any) {
@@ -11,9 +13,9 @@ export function useTranslations(lang: any) {
 
 export function getLocaleRoute(lang: string, routeName : string = '', params = {}) {
 
-
   if(!hasDynamicPath(routeName)){
-    return routes[routeName] && routes[routeName][lang] ? getRelativeLocaleUrl(lang, routes[routeName][lang]) : ''
+    const _lang = VITE_TARGET == 'preview' ? 'en' : lang
+    return routes[routeName] && routes[routeName][lang] ? getRelativeLocaleUrl(lang, routes[routeName][_lang]) : ''
   } else {
     const map = {}
     routeName.split('/').filter(part => part.startsWith('[')).map(part => { map[part] = '' })
@@ -22,6 +24,7 @@ export function getLocaleRoute(lang: string, routeName : string = '', params = {
         map[`[${key}]`] = params[key]
       }
     }
+    
     const translatedPath = routes[routeName][lang].split('/').map(part => {
       if(part.startsWith('[')) {
         part = map[part]

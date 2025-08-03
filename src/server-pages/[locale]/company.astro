@@ -1,0 +1,50 @@
+---
+import { paths } from "@stores/i18n-params";
+import { getSeoData, seoData } from "@stores/seo";
+import { getLiveCollection } from "astro:content";
+
+import Company from "@components/pages/Company.astro";
+
+// const pages = await getLiveCollection('livePages')
+// const page = pages.entries.find(page => page.template.templateName == 'Azienda')
+
+
+// export async function getStaticPaths() {
+
+//   const pages = await getCollection('pages')
+//   const page = pages.find(page => page.data.template.templateName == 'Azienda')
+
+//   return [{l: 'it', s: 'azienda'}, {l: 'en', s: 'company'}].map((lang) => {
+//     return {
+//       params: { locale: lang.l, company: lang.s },
+//       props: {
+//         page: page.data
+//       }
+//     };
+//   });
+// }
+
+const slugs : any = {};
+[{l: 'it', s: 'azienda'}, {l: 'en', s: 'company'}].map(
+  (t) => (slugs[t.l] = { company: t.s })
+);
+
+paths.set(slugs);
+
+seoData.set({
+  ...getSeoData(null),
+  languageAlternates: [
+    ...['it', 'en'].map(lang => ({
+      href: `/${lang}/azienda`,
+      hrefLang: lang,
+    })),
+    {
+      href: `https://www.website.it/it`,
+      hrefLang: 'x-default',
+    }
+  ]
+});
+
+---
+
+<Company />
